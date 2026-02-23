@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Aykut Cosgun</title>
+  <meta name="description" content="Data science projects by Aykut Cosgun — data cleaning, pipeline building, and analysis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ====== NAV ====== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">AC</a>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-overlay"></div>
+  </nav>
+
+  <!-- ====== PAGE HEADER ====== -->
+  <header class="page-header">
+    <h1 class="gradient-text">Projects</h1>
+    <p>End-to-end data science work, from raw data to actionable results.</p>
+  </header>
+
+  <!-- ====== PROJECT: E-COMMERCE CLEANING ====== -->
+  <section class="section">
+    <div class="project-card-large">
+      <div class="card-img">
+        <img src="assets/img/cleaning_summary.png" alt="E-commerce data cleaning summary chart showing issues detected and resolved">
+      </div>
+      <div class="card-body">
+        <span class="card-category">Data Cleaning</span>
+        <h3>Large-Scale E-commerce Data Cleaning &amp; Standardization</h3>
+
+        <div class="metrics-row">
+          <div class="metric">
+            <span class="metric-value">125,000</span>
+            <span class="metric-label">Rows Processed</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value">8</span>
+            <span class="metric-label">Issues Fixed</span>
+          </div>
+          <div class="metric">
+            <span class="metric-value">5,000</span>
+            <span class="metric-label">Duplicates Removed</span>
+          </div>
+        </div>
+
+        <p>
+          Built an automated pipeline to clean and standardize a 125K-row e-commerce dataset.
+          The workflow detects and resolves eight categories of data quality issues, including
+          missing values, duplicate records, inconsistent formatting, and outlier prices, producing
+          an analysis-ready output with full before/after documentation.
+        </p>
+
+        <div class="tag-group" style="margin-bottom: 24px;">
+          <span class="tag">Python</span>
+          <span class="tag">Pandas</span>
+          <span class="tag">NumPy</span>
+        </div>
+
+        <div class="card-actions">
+          <a href="https://github.com/theaiagent/large-scale-data-cleaning-ecommerce-" class="btn btn-sm" target="_blank" rel="noopener">
+            GitHub &rarr;
+          </a>
+          <a href="posts/ecommerce-data-cleaning.html" class="btn-outline btn-sm">
+            Case Study &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== COMING SOON ====== -->
+  <section class="section" style="padding-top: 0;">
+    <div class="coming-soon">
+      <h3>More Projects Coming Soon</h3>
+      <p>Currently working on new data science projects. Stay tuned!</p>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="https://github.com/theaiagent" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:h.aykut.cosgun@bozok.edu.tr">Email</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Aykut Cosgun. All rights reserved.</p>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
