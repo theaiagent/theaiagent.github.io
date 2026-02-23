@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Aykut Cosgun</title>
+  <meta name="description" content="Blog by Aykut Cosgun — notes on data science, Python, and lessons from real-world projects.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ====== NAV ====== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">AC</a>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-overlay"></div>
+  </nav>
+
+  <!-- ====== PAGE HEADER ====== -->
+  <header class="page-header">
+    <h1 class="gradient-text">Blog</h1>
+    <p>Notes on data science, Python, and lessons from real-world projects.</p>
+  </header>
+
+  <!-- ====== BLOG LIST ====== -->
+  <section class="section">
+    <a href="posts/2026-02-23-ecommerce-data-cleaning.html" class="blog-card">
+      <span class="post-date">February 23, 2026</span>
+      <h3>Cleaning 125K Rows of Messy E-commerce Data</h3>
+      <p>
+        What happens when a 125,000-row e-commerce export arrives with five different date formats,
+        corrupted Unicode, and currency symbols scattered through the price column? I built a
+        10-step Python pipeline to fix all of it automatically.
+      </p>
+      <div class="tag-group">
+        <span class="tag">Data Cleaning</span>
+        <span class="tag">Python</span>
+        <span class="tag">Pandas</span>
+      </div>
+      <span class="read-more">8 min read &middot; Read &rarr;</span>
+    </a>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="https://github.com/theaiagent" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:h.aykut.cosgun@bozok.edu.tr">Email</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Aykut Cosgun. All rights reserved.</p>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

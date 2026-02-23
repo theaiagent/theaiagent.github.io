@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cleaning 125K Rows of Messy E-commerce Data — Aykut Cosgun</title>
+  <meta name="description" content="How I built a 10-step Python pipeline to clean 125,000 rows of messy e-commerce data with encoding corruption, mixed date formats, and currency symbols.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- ====== NAV ====== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">AC</a>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../projects.html">Projects</a></li>
+        <li><a href="../blog.html">Blog</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-overlay"></div>
+  </nav>
+
+  <!-- ====== BLOG POST ====== -->
+  <article class="blog-post">
+
+    <a href="../blog.html" style="color: var(--gradient-start); font-weight: 600; text-decoration: none; display: inline-block; margin-bottom: 24px;">&larr; Back to Blog</a>
+
+    <h1 class="gradient-text">Cleaning 125K Rows of Messy E-commerce Data</h1>
+
+    <div class="post-meta">
+      <span>February 23, 2026</span>
+      <span>&middot;</span>
+      <span>8 min read</span>
+    </div>
+
+    <div class="tag-group" style="margin-bottom: 40px;">
+      <span class="tag">Data Cleaning</span>
+      <span class="tag">Python</span>
+      <span class="tag">Pandas</span>
+    </div>
+
+    <!-- ====== SECTION 1: THE PROBLEM ====== -->
+    <h2>The Problem</h2>
+
+    <p>
+      If you have ever worked with e-commerce data exports, you know the drill. The CSV arrives,
+      you open it up expecting clean rows and columns, and instead you are staring at a mess.
+      Dates in three different formats. Currency symbols jammed into the price column. Product
+      names full of garbled characters that used to be accented letters. It is the kind of thing
+      that makes you close your laptop and go for a walk.
+    </p>
+
+    <p>
+      That is exactly what I was dealing with on this project. A Shopify-style export with
+      <strong>125,000 rows</strong> and <strong>13 columns</strong> that contained
+      <strong>8 distinct data quality issues</strong>. Here is what I found when I first loaded
+      the file:
+    </p>
+
+    <ul>
+      <li><strong>UTF-8 encoding corruption</strong> across 37,978 product names &mdash; characters like "Cr&egrave;me Br&ucirc;l&eacute;e" had turned into unreadable mojibake artifacts</li>
+      <li><strong>5 different date formats</strong> mixed together (DD.MM.YYYY, Mon DD YYYY, MM/DD/YYYY, and more) affecting 99,933 rows</li>
+      <li><strong>Currency symbols embedded in prices</strong> &mdash; dollar signs, euro symbols, pound signs, and "TL" suffixes in 74,901 rows, with some using comma decimals</li>
+      <li><strong>5,000 exact duplicate records</strong> inflating the dataset</li>
+      <li><strong>12 variants of the status field</strong> including misspellings like "Cancellled" and "deliverred"</li>
+      <li><strong>Inconsistent country names</strong> in 73,483 rows &mdash; a mix of full names, abbreviations, and different casings</li>
+      <li><strong>SKU format chaos</strong> &mdash; some rows had "SKU003", others "sku-002", others "Sku-010"</li>
+      <li><strong>3 entirely empty columns</strong> and placeholder strings like "N/A" pretending to be real data</li>
+    </ul>
+
+    <figure>
+      <img src="../assets/img/before_raw_data.png" alt="Screenshot of the raw e-commerce dataset showing encoding errors, mixed date formats, and currency symbols in the data" style="width: 100%;">
+      <figcaption style="text-align: center; color: var(--text-muted); font-size: 0.88rem; margin-top: 8px;">
+        A sample of the raw data &mdash; note the garbled product names, inconsistent dates, and currency symbols in the price column.
+      </figcaption>
+    </figure>
+
+    <p>
+      None of this data was usable for reporting or analysis in its current state. Every
+      downstream task &mdash; aggregations, joins, visualizations &mdash; would break or
+      produce wrong results. Cleaning it by hand was out of the question at this scale.
+      I needed a pipeline.
+    </p>
+
+    <!-- ====== SECTION 2: THE APPROACH ====== -->
+    <h2>The Approach</h2>
+
+    <p>
+      I built a <strong>10-step automated pipeline</strong> in Python using Pandas and a
+      few lightweight libraries. The idea was simple: each step handles exactly one type of
+      problem, runs in sequence, and the whole thing finishes in seconds. No manual
+      intervention, no spreadsheet gymnastics.
+    </p>
+
+    <p>Here is the high-level flow:</p>
+
+    <ol>
+      <li>Drop exact duplicate rows</li>
+      <li>Remove entirely empty columns</li>
+      <li>Fix UTF-8 encoding corruption</li>
+      <li>Standardize date formats to ISO 8601</li>
+      <li>Strip currency symbols and normalize prices to float</li>
+      <li>Normalize status values (fix typos, lowercase)</li>
+      <li>Map country names to ISO alpha-2 codes</li>
+      <li>Standardize SKU format to uppercase with dash</li>
+      <li>Normalize phone numbers to a consistent pattern</li>
+      <li>Convert placeholder strings (N/A, empty) to proper nulls</li>
+    </ol>
+
+    <p>
+      Let me walk through a few of the trickier steps.
+    </p>
+
+    <h3>Date Standardization</h3>
+
+    <p>
+      The date column was a nightmare. Five different formats coexisting in the same column.
+      Some rows had "May 28, 2023", others had "14.04.2023", and others used "01/26/2023".
+      Pandas has a neat trick for this &mdash; the <code>format='mixed'</code> parameter in
+      <code>pd.to_datetime</code> lets it try multiple parsers automatically:
+    </p>
+
+    <pre><code>df['order_date'] = pd.to_datetime(df['order_date'], format='mixed', dayfirst=False)
+df['order_date'] = df['order_date'].dt.strftime('%Y-%m-%d')</code></pre>
+
+    <p>
+      Two lines, and every date in the dataset is now in clean ISO 8601 format. The
+      <code>dayfirst=False</code> flag matters here because some ambiguous dates like
+      "05/06/2023" need a consistent interpretation rule.
+    </p>
+
+    <h3>Encoding Repair</h3>
+
+    <p>
+      The encoding corruption was caused by double-encoded UTF-8. Somewhere along the way,
+      text that was already UTF-8 got treated as Latin-1 and encoded again, producing
+      mojibake like "&Atilde;&copy;" instead of "&eacute;". The fix is to reverse that
+      process &mdash; encode back to Latin-1 bytes, then decode as UTF-8:
+    </p>
+
+    <pre><code>def fix_encoding(text):
+    try:
+        return text.encode('latin-1').decode('utf-8')
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        return text</code></pre>
+
+    <p>
+      This function is applied to every product name in the dataset. The try/except block
+      ensures that names which are already clean pass through untouched. After running this
+      on 37,978 affected rows, every product name was restored to its correct Unicode form.
+    </p>
+
+    <h3>Currency Normalization</h3>
+
+    <p>
+      Prices in the dataset came in several flavors: "$8.97", "&euro;141,43", "256.01 TL",
+      and "&pound;37.42". Some used commas as decimal separators (European style), and some
+      had the symbol as a prefix, others as a suffix. I needed clean float values:
+    </p>
+
+    <pre><code>def clean_price(val):
+    if pd.isna(val):
+        return val
+    text = str(val)
+    text = re.sub(r'[$&euro;&pound;]', '', text)   # strip currency symbols
+    text = text.replace('TL', '').strip()     # handle TL suffix
+    text = text.replace(',', '.')             # comma decimal to dot
+    return float(text)</code></pre>
+
+    <p>
+      The order of operations matters. Stripping symbols first, then handling the comma-to-dot
+      conversion, ensures we do not accidentally mangle numbers that use commas as thousands
+      separators versus decimal separators. For this dataset, all commas were decimal separators,
+      so the approach was straightforward.
+    </p>
+
+    <!-- ====== SECTION 3: RESULTS ====== -->
+    <h2>Results</h2>
+
+    <figure>
+      <img src="../assets/img/after_cleaned_data.png" alt="Screenshot of the cleaned dataset showing standardized dates, clean prices, and corrected product names" style="width: 100%;">
+      <figcaption style="text-align: center; color: var(--text-muted); font-size: 0.88rem; margin-top: 8px;">
+        The same data after cleaning &mdash; consistent dates, numeric prices, and correctly encoded product names.
+      </figcaption>
+    </figure>
+
+    <p>
+      After running the full pipeline, the transformation was significant. Here is the
+      before-and-after comparison:
+    </p>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+      <thead>
+        <tr style="border-bottom: 2px solid var(--border-light);">
+          <th style="text-align: left; padding: 12px 16px; font-weight: 600;">Metric</th>
+          <th style="text-align: left; padding: 12px 16px; font-weight: 600;">Before</th>
+          <th style="text-align: left; padding: 12px 16px; font-weight: 600;">After</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--border-light);">
+          <td style="padding: 12px 16px;">Rows</td>
+          <td style="padding: 12px 16px;">125,000</td>
+          <td style="padding: 12px 16px;">120,000</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border-light);">
+          <td style="padding: 12px 16px;">Columns</td>
+          <td style="padding: 12px 16px;">13</td>
+          <td style="padding: 12px 16px;">10</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border-light);">
+          <td style="padding: 12px 16px;">Duplicates</td>
+          <td style="padding: 12px 16px;">5,000</td>
+          <td style="padding: 12px 16px;">0</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border-light);">
+          <td style="padding: 12px 16px;">Date formats</td>
+          <td style="padding: 12px 16px;">5</td>
+          <td style="padding: 12px 16px;">1</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border-light);">
+          <td style="padding: 12px 16px;">Encoding errors</td>
+          <td style="padding: 12px 16px;">37,978</td>
+          <td style="padding: 12px 16px;">0</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <figure>
+      <img src="../assets/img/cleaning_summary.png" alt="Chart summarizing the cleaning pipeline results across all 8 issue categories" style="width: 100%;">
+      <figcaption style="text-align: center; color: var(--text-muted); font-size: 0.88rem; margin-top: 8px;">
+        Full cleaning summary &mdash; every issue category resolved across all 125K rows.
+      </figcaption>
+    </figure>
+
+    <p>
+      The entire pipeline processes all 125,000 rows in <strong>roughly 15 seconds</strong>
+      on a standard machine. That includes reading the CSV, applying all 10 cleaning steps,
+      running validation checks, and writing the cleaned output. Compare that to the days it
+      would take to clean this manually in a spreadsheet, and the value of automation becomes
+      pretty clear.
+    </p>
+
+    <!-- ====== SECTION 4: KEY TAKEAWAYS ====== -->
+    <h2>Key Takeaways</h2>
+
+    <p>
+      After building this pipeline, a few lessons stand out that apply to any data cleaning
+      project:
+    </p>
+
+    <ul>
+      <li>
+        <strong>Automate early, not later.</strong> The temptation is to fix a few things by
+        hand first and "automate it properly next time." That next time never comes. Writing
+        a cleaning function takes barely longer than doing it manually once, and you can rerun
+        it every time the data refreshes.
+      </li>
+      <li>
+        <strong>Handle encoding at the source.</strong> Encoding corruption is one of those
+        issues that gets worse the longer you ignore it. If your data pipeline touches text
+        with non-ASCII characters, make sure every step agrees on UTF-8. Catching it downstream
+        is possible (as I showed here) but preventing it upstream is better.
+      </li>
+      <li>
+        <strong>Always validate after cleaning.</strong> It is not enough to run your
+        transformations and assume they worked. I built validation checks into the pipeline
+        that verify zero duplicates remain, all dates parse correctly, all prices are numeric,
+        and no encoding artifacts survive. Trust, but verify.
+      </li>
+      <li>
+        <strong>Keep each step independent.</strong> A modular pipeline where each function
+        handles one concern is far easier to debug, test, and extend than a monolithic script.
+        When a new data quality issue shows up (and it will), you just add one more step.
+      </li>
+    </ul>
+
+    <p>
+      The full code and dataset are available on GitHub if you want to explore the
+      implementation or adapt it for your own projects:
+      <a href="https://github.com/theaiagent/large-scale-data-cleaning-ecommerce-" target="_blank" rel="noopener">
+        github.com/theaiagent/large-scale-data-cleaning-ecommerce-
+      </a>
+    </p>
+
+  </article>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="https://github.com/theaiagent" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:h.aykut.cosgun@bozok.edu.tr">Email</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Aykut Cosgun. All rights reserved.</p>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
