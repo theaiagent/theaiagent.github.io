@@ -1,162 +1,717 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About — Aykut Coşgun</title>
-  <meta name="description" content="About Aykut Cosgun — Data Scientist with expertise in data cleaning, analysis, and pipeline building.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafaf9;
+      --surface: #ffffff;
+      --nav-bg: #0f0f0f;
+      --nav-text: #e8e8e8;
+      --nav-link: #a0a0a0;
+      --nav-link-hover: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #555;
+      --text-muted: #888;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --accent-2: #7c3aed;
+      --border: #e5e5e5;
+      --tag-bg: #f0f0f0;
+      --tag-text: #444;
+      --bar-track: #ebebeb;
+      --bar-fill: #1a1a1a;
+      --bar-fill-ai: #2563eb;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--nav-bg);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--nav-text);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--nav-link);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 400;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--nav-link-hover);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--nav-bg);
+      color: #fff;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(37,99,235,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #fff;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Dual-role badge */
+    .roles {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: #c8d5f0;
+      letter-spacing: 0.02em;
+    }
+
+    .role-badge.primary {
+      background: rgba(37,99,235,0.25);
+      border-color: rgba(37,99,235,0.5);
+      color: #93c5fd;
+    }
+
+    .role-badge.secondary {
+      background: rgba(124,58,237,0.2);
+      border-color: rgba(124,58,237,0.4);
+      color: #c4b5fd;
+    }
+
+    .roles-divider {
+      color: rgba(255,255,255,0.25);
+      font-size: 0.75rem;
+    }
+
+    .hero p {
+      max-width: 640px;
+      margin: 0 auto 2rem;
+      color: #9ca3af;
+      font-size: 1rem;
+      line-height: 1.75;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-meta a {
+      font-size: 0.8rem;
+      font-family: 'DM Mono', monospace;
+      color: #6b7280;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .hero-meta a:hover { color: #93c5fd; }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem 5rem;
+    }
+
+    section { margin-bottom: 4rem; }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    /* ── CARDS GRID ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.5rem;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      transform: translateY(-2px);
+      border-color: #d0d0d0;
+    }
+
+    .card.ai-card {
+      border-color: #bfdbfe;
+      background: linear-gradient(135deg, #f0f7ff 0%, #faf5ff 100%);
+    }
+
+    .card.ai-card:hover {
+      border-color: #93c5fd;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.1);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-title .new-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color: #fff;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      vertical-align: middle;
+      margin-left: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card-desc {
+      font-size: 0.855rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── TECH STACK ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .stack-grid { grid-template-columns: 1fr; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    .stack-item { display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .stack-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stack-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stack-tag {
+      font-size: 0.65rem;
+      font-family: 'DM Mono', monospace;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    .stack-tag.ai {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .stack-pct {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .bar-track {
+      height: 5px;
+      background: var(--bar-track);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--bar-fill);
+      transform-origin: left;
+      animation: barGrow 1s cubic-bezier(0.4,0,0.2,1) forwards;
+      transform: scaleX(0);
+    }
+
+    .bar-fill.ai { background: linear-gradient(90deg, #2563eb, #7c3aed); }
+
+    @keyframes barGrow {
+      to { transform: scaleX(1); }
+    }
+
+    /* ── RESEARCH BLOCK ── */
+    .research-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      border-left: 3px solid var(--accent);
+    }
+
+    .research-block p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    .research-block p:last-child { margin-bottom: 0; }
+
+    .research-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .research-tag {
+      font-size: 0.8rem;
+      font-family: 'DM Mono', monospace;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--nav-bg);
+      color: #555;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.82rem;
+    }
+
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      list-style: none;
+    }
+
+    footer .footer-links a {
+      color: #888;
+      text-decoration: none;
+      transition: color 0.2s;
+      font-size: 0.85rem;
+    }
+
+    footer .footer-links a:hover { color: #ccc; }
+  </style>
 </head>
 <body>
 
-  <!-- ====== NAV ====== -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">AC</a>
-      <button class="nav-toggle" aria-label="Toggle navigation">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-    <div class="nav-overlay"></div>
+  <!-- NAV -->
+  <nav>
+    <a href="https://theaiagent.github.io/index.html" class="nav-logo">AC</a>
+    <ul class="nav-links">
+      <li><a href="https://theaiagent.github.io/index.html">Home</a></li>
+      <li><a href="https://theaiagent.github.io/projects.html">Projects</a></li>
+      <li><a href="https://theaiagent.github.io/blog.html">Blog</a></li>
+      <li><a href="https://theaiagent.github.io/about.html" class="active">About</a></li>
+      <li><a href="https://theaiagent.github.io/contact.html">Contact</a></li>
+    </ul>
   </nav>
 
-  <!-- ====== ABOUT ME ====== -->
-  <section class="section">
-    <div class="about-header">
-      <div class="avatar-placeholder">AC</div>
-      <div>
-        <h1 class="gradient-text">Aykut Cosgun</h1>
-        <p class="hero-subtitle" style="margin-bottom:0;">Data Scientist</p>
-      </div>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-avatar">AC</div>
+    <h1>H. Aykut Coşgun</h1>
+
+    <div class="roles">
+      <span class="role-badge primary">⬡ Data Scientist</span>
+      <span class="roles-divider">·</span>
+      <span class="role-badge secondary">✦ AI Engineer</span>
+      <span class="roles-divider">·</span>
+      <span class="role-badge">⚙ Automation Specialist</span>
     </div>
 
-    <div class="about-bio">
-      <p>
-        I am a data scientist focused on transforming messy, real-world datasets into
-        clean, analysis-ready resources. My day-to-day work involves building automated
-        cleaning pipelines, performing exploratory analysis, and creating reproducible
-        workflows that scale.
-      </p>
-      <p>
-        With a strong foundation in Python and the modern data stack, I enjoy tackling the
-        unglamorous but critical problems in data quality that make or break downstream
-        analysis. Whether it is standardizing 125K rows of e-commerce data or designing an
-        end-to-end ETL pipeline, I care about getting the details right.
-      </p>
-      <p>
-        When I am not wrangling data, I write about practical data science topics and share
-        open-source projects that demonstrate real-world problem solving.
-      </p>
+    <p>
+      I build intelligent data systems and automated workflows — from large-scale
+      cleaning pipelines to LLM-powered applications and no-code/low-code automation.
+      I turn complex data and repetitive processes into scalable, production-ready solutions.
+    </p>
+
+    <div class="hero-meta">
+      <a href="https://github.com/theaiagent" target="_blank">⌥ github/theaiagent</a>
+      <a href="https://www.linkedin.com/in/aykut-cosgun/" target="_blank">in linkedin/aykut-cosgun</a>
+      <a href="mailto:h.aykut.cosgun@gmail.com">✉ h.aykut.cosgun@gmail.com</a>
     </div>
-  </section>
+  </div>
 
-  <!-- ====== WHAT I DO ====== -->
-  <section class="section" style="padding-top: 0;">
-    <h2 class="section-title gradient-text">What I Do</h2>
-    <p class="section-subtitle">Core areas of expertise across the data lifecycle.</p>
+  <!-- MAIN -->
+  <main>
 
-    <div class="card-grid">
-      <div class="card expertise-card">
-        <span class="icon">&#128451;</span>
-        <h3>Data Cleaning</h3>
-        <p>Transform messy, inconsistent datasets into clean, analysis-ready data.</p>
+    <!-- BIO -->
+    <section>
+      <div class="section-label">Background</div>
+      <div class="section-title">About Me</div>
+      <div class="research-block">
+        <p>
+          I am a Data Scientist and AI Engineer focused on building robust, production-ready systems
+          that extract genuine value from complex, large-scale datasets. My work spans the full
+          delivery lifecycle: raw data ingestion and cleaning, machine learning model development,
+          LLM-powered application engineering, and end-to-end workflow automation.
+        </p>
+        <p>
+          On the AI engineering side, I design and evaluate LLM pipelines using frameworks such
+          as AutoGen, CrewAI, and LangChain/LangGraph, build retrieval-augmented and agentic systems, and apply
+          explainable AI methods (SHAP) to make model decisions transparent and auditable.
+          I work across industries — wherever data quality, intelligent automation, or
+          predictive capability can create measurable impact.
+        </p>
+        <p>
+          I also design and deploy no-code/low-code automation workflows using n8n,
+          connecting APIs, databases, and AI models into seamless pipelines that eliminate
+          manual bottlenecks. Whether it is standardising 125K rows of e-commerce data,
+          orchestrating a multi-step AI agent, or wiring up a trigger-based n8n workflow,
+          I care about correctness, reproducibility, and scale.
+        </p>
+        <div class="research-tags">
+          <span class="research-tag">LLM Pipelines</span>
+          <span class="research-tag">Data Engineering</span>
+          <span class="research-tag">XAI / SHAP</span>
+          <span class="research-tag">Workflow Automation</span>
+          <span class="research-tag">RAG &amp; Agents</span>
+          <span class="research-tag">n8n</span>
+          <span class="research-tag">Predictive Modelling</span>
+        </div>
       </div>
+    </section>
 
-      <div class="card expertise-card">
-        <span class="icon">&#128200;</span>
-        <h3>Analysis &amp; Visualization</h3>
-        <p>Extract insights and create compelling visual stories from data.</p>
-      </div>
+    <!-- WHAT I DO -->
+    <section>
+      <div class="section-label">Expertise</div>
+      <div class="section-title">What I Do</div>
+      <div class="section-subtitle">Core areas of expertise across the data and AI lifecycle.</div>
 
-      <div class="card expertise-card">
-        <span class="icon">&#129302;</span>
-        <h3>Predictive Modelling</h3>
-        <p>Build ML models to forecast trends and drive business decisions.</p>
-      </div>
+      <div class="cards-grid">
 
-      <div class="card expertise-card">
-        <span class="icon">&#128202;</span>
-        <h3>Statistical Analysis</h3>
-        <p>Apply rigorous statistical methods to validate hypotheses and quantify uncertainty.</p>
-      </div>
+        <div class="card">
+          <span class="card-icon">🗃</span>
+          <div class="card-title">Data Cleaning</div>
+          <div class="card-desc">Transform messy, inconsistent datasets into clean, analysis-ready data at scale.</div>
+        </div>
 
-      <div class="card expertise-card">
-        <span class="icon">&#128640;</span>
-        <h3>Pipeline Building</h3>
-        <p>Design automated data pipelines for scalable, repeatable workflows.</p>
-      </div>
+        <div class="card">
+          <span class="card-icon">📈</span>
+          <div class="card-title">Analysis &amp; Visualisation</div>
+          <div class="card-desc">Extract insights and create compelling visual narratives from complex datasets.</div>
+        </div>
 
-      <div class="card expertise-card">
-        <span class="icon">&#9881;</span>
-        <h3>Workflow Automation</h3>
-        <p>Streamline repetitive processes with scheduled, end-to-end automation.</p>
-      </div>
-    </div>
-  </section>
+        <div class="card">
+          <span class="card-icon">🤖</span>
+          <div class="card-title">Predictive Modelling</div>
+          <div class="card-desc">Build and evaluate ML models to forecast outcomes and support data-driven decisions.</div>
+        </div>
 
-  <!-- ====== TECH STACK ====== -->
-  <section class="section" style="padding-top: 0;">
-    <h2 class="section-title gradient-text" style="text-align:center;">Tech Stack</h2>
-    <p class="section-subtitle" style="text-align:center;">Proficiency across the modern data science toolkit.</p>
+        <div class="card ai-card">
+          <span class="card-icon">🧠</span>
+          <div class="card-title">AI Engineering</div>
+          <div class="card-desc">Design LLM-powered pipelines and multi-agent systems using AutoGen, CrewAI, and LangChain/LangGraph — with RAG architectures, tool-use, and multi-model orchestration.</div>
+        </div>
 
-    <div class="skill-list">
-      <div class="skill-item">
-        <div class="skill-label"><span>Python</span><span>95%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:95%;"></div></div>
-      </div>
-      <div class="skill-item">
-        <div class="skill-label"><span>Pandas</span><span>90%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:90%;"></div></div>
-      </div>
-      <div class="skill-item">
-        <div class="skill-label"><span>NumPy</span><span>90%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:90%;"></div></div>
-      </div>
-      <div class="skill-item">
-        <div class="skill-label"><span>SQL</span><span>80%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:80%;"></div></div>
-      </div>
-      <div class="skill-item">
-        <div class="skill-label"><span>Scikit-learn</span><span>80%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:80%;"></div></div>
-      </div>
-      <div class="skill-item">
-        <div class="skill-label"><span>Tableau</span><span>75%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:75%;"></div></div>
-      </div>
-      <div class="skill-item">
-        <div class="skill-label"><span>PySpark</span><span>65%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:65%;"></div></div>
-      </div>
-      <div class="skill-item">
-        <div class="skill-label"><span>Airflow</span><span>65%</span></div>
-        <div class="progress-bar"><div class="progress-bar-fill" style="width:65%;"></div></div>
-      </div>
-    </div>
-  </section>
+        <div class="card">
+          <span class="card-icon">📊</span>
+          <div class="card-title">Statistical Analysis</div>
+          <div class="card-desc">Apply rigorous statistical methods to validate hypotheses and quantify uncertainty.</div>
+        </div>
 
-  <!-- ====== FOOTER ====== -->
-  <footer class="footer">
+        <div class="card">
+          <span class="card-icon">🚀</span>
+          <div class="card-title">Pipeline Building</div>
+          <div class="card-desc">Design automated data and AI pipelines for scalable, repeatable, production-grade workflows.</div>
+        </div>
+
+        <div class="card ai-card">
+          <span class="card-icon">🔍</span>
+          <div class="card-title">Explainable AI</div>
+          <div class="card-desc">Apply SHAP-based interpretability methods to make ML model decisions transparent, auditable, and defensible across business and technical stakeholders.</div>
+        </div>
+
+        <div class="card ai-card">
+          <span class="card-icon">⚡</span>
+          <div class="card-title">Workflow Automation</div>
+          <div class="card-desc">Design and deploy no-code/low-code automation workflows with n8n — connecting APIs, databases, AI models, and external services into trigger-based pipelines that run without manual intervention.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section>
+      <div class="section-label">Technical Proficiency</div>
+      <div class="section-title">Tech Stack</div>
+      <div class="section-subtitle">Proficiency across the modern data science and AI engineering toolkit.</div>
+
+      <div class="stack-grid">
+
+        <!-- Data Science -->
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">Python <span class="stack-tag">Core</span></span>
+            <span class="stack-pct">95%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">Pandas / Polars</span>
+            <span class="stack-pct">90%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">SQL / PostgreSQL</span>
+            <span class="stack-pct">85%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">Scikit-learn</span>
+            <span class="stack-pct">80%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">NumPy</span>
+            <span class="stack-pct">90%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">PySpark</span>
+            <span class="stack-pct">65%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+        </div>
+
+        <!-- AI Engineering -->
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">LLM APIs (Claude · OpenAI · OpenRouter) <span class="stack-tag ai">AI</span></span>
+            <span class="stack-pct">85%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill ai" style="width:85%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">AutoGen / CrewAI / LangChain <span class="stack-tag ai">AI</span></span>
+            <span class="stack-pct">75%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill ai" style="width:75%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">XAI / SHAP <span class="stack-tag ai">AI</span></span>
+            <span class="stack-pct">75%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill ai" style="width:75%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">RAG / Vector DBs <span class="stack-tag ai">AI</span></span>
+            <span class="stack-pct">70%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill ai" style="width:70%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">Plotly / Dash</span>
+            <span class="stack-pct">80%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">n8n <span class="stack-tag ai">Automation</span></span>
+            <span class="stack-pct">85%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill ai" style="width:85%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">Airflow / ETL</span>
+            <span class="stack-pct">65%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+        </div>
+
+        <div class="stack-item">
+          <div class="stack-row">
+            <span class="stack-name">LangGraph <span class="stack-tag ai">AI</span></span>
+            <span class="stack-pct">70%</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill ai" style="width:70%"></div></div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
     <ul class="footer-links">
-      <li><a href="https://github.com/theaiagent" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://github.com/theaiagent" target="_blank">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/aykut-cosgun/" target="_blank">LinkedIn</a></li>
       <li><a href="mailto:h.aykut.cosgun@gmail.com">Email</a></li>
     </ul>
-    <p class="footer-copy">&copy; 2026 Aykut Cosgun. All rights reserved.</p>
+    <p>© 2026 H. Aykut Coşgun. All rights reserved.</p>
   </footer>
 
-  <script src="assets/js/main.js"></script>
 </body>
 </html>
