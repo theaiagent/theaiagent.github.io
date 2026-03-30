@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building SynthEd: Agent-Based Synthetic Data for ODL Research — Aykut Cosgun</title>
+  <meta name="description" content="How I built an agent-based simulation framework that generates behaviorally coherent synthetic student data for Open & Distance Learning dropout research.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- ====== NAV ====== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">AC</a>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../projects.html">Projects</a></li>
+        <li><a href="../blog.html">Blog</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="nav-overlay"></div>
+  </nav>
+
+  <!-- ====== BLOG POST ====== -->
+  <article class="blog-post">
+
+    <a href="../blog.html" style="color: var(--gradient-start); font-weight: 600; text-decoration: none; display: inline-block; margin-bottom: 24px;">&larr; Back to Blog</a>
+
+    <h1 class="gradient-text">Building SynthEd: Agent-Based Synthetic Data for ODL Research</h1>
+
+    <div class="post-meta">
+      <span>March 30, 2026</span>
+      <span>&middot;</span>
+      <span>10 min read</span>
+    </div>
+
+    <div class="tag-group" style="margin-bottom: 40px;">
+      <span class="tag">Synthetic Data</span>
+      <span class="tag">Agent-Based Simulation</span>
+      <span class="tag">Python</span>
+      <span class="tag">ODL</span>
+    </div>
+
+    <!-- ====== SECTION 1: THE PROBLEM ====== -->
+    <h2>The Problem</h2>
+
+    <p>
+      Educational data mining research has a data problem. If you want to study why students
+      drop out of Open and Distance Learning (ODL) programs, you need access to student
+      interaction logs, demographic profiles, engagement trajectories, and outcome records.
+      But privacy regulations like GDPR and KVKK make this data extremely difficult to obtain.
+    </p>
+
+    <p>
+      Existing synthetic data approaches &mdash; GANs, VAEs, SMOTE &mdash; can generate
+      numbers that look statistically similar, but they produce temporally incoherent data.
+      A GAN does not know that a student who failed a midterm should show declining engagement
+      in the following weeks. It just generates rows.
+    </p>
+
+    <p>
+      I wanted something different: synthetic data where every interaction trace is
+      <strong>behaviorally grounded</strong> in a simulated student's personality,
+      motivation, life circumstances, and evolving academic experience.
+    </p>
+
+    <!-- ====== SECTION 2: THE APPROACH ====== -->
+    <h2>The Approach: Theory-Driven Agent Simulation</h2>
+
+    <p>
+      SynthEd takes a fundamentally different approach. Instead of learning patterns
+      from existing data, it <strong>simulates students as autonomous agents</strong>,
+      each with a rich persona grounded in established educational psychology theories.
+    </p>
+
+    <p>
+      Each simulated student has:
+    </p>
+
+    <ul>
+      <li><strong>Big Five personality traits</strong> (Costa &amp; McCrae, 1992) that influence study habits and social behavior</li>
+      <li><strong>SDT motivation type</strong> (Deci &amp; Ryan, 1985) that evolves during the simulation based on need satisfaction</li>
+      <li><strong>Environmental pressures</strong> (Bean &amp; Metzner, 1985) &mdash; employment, family responsibilities, financial stress</li>
+      <li><strong>Digital skills and self-regulation</strong> (Rovai, 2003) that determine persistence capacity</li>
+      <li><strong>Learner autonomy</strong> (Moore, 1993) that interacts with course structure to produce transactional distance</li>
+    </ul>
+
+    <p>
+      These are not just static attributes. The simulation runs <strong>week by week</strong>,
+      with each student generating realistic LMS interactions (logins, forum posts, assignment
+      submissions, exam scores) based on their current engagement level, which itself evolves
+      through the interplay of all theoretical frameworks.
+    </p>
+
+    <!-- ====== SECTION 3: THE ARCHITECTURE ====== -->
+    <h2>Two-Phase Weekly Loop</h2>
+
+    <p>
+      The simulation uses a two-phase architecture inspired by agent-based social simulation
+      (Epstein &amp; Axtell, 1996):
+    </p>
+
+    <p>
+      <strong>Phase 1 (Individual)</strong>: Each student independently generates interactions,
+      updates their academic/social integration (Tinto), Community of Inquiry presences
+      (Garrison), SDT need satisfaction, and exhaustion level (Gonzalez et al., 2025).
+      Engagement is then updated through a multi-theory composite formula.
+    </p>
+
+    <p>
+      <strong>Phase 2 (Social)</strong>: Students who posted in the same forum form peer
+      connections. The social network mediates engagement contagion &mdash; connected students
+      pull each other's engagement toward the local mean. When a student enters advanced
+      dropout phases, their neighbors face increased dropout risk (dropout cascades).
+    </p>
+
+    <p>
+      Dropout itself follows a 6-phase process model based on
+      B&auml;ulke, Grunschel &amp; Dresel (2022): non-fit perception &rarr;
+      thoughts of quitting &rarr; deliberation &rarr; information search &rarr;
+      final decision, with recovery possible at every stage.
+    </p>
+
+    <!-- ====== SECTION 4: MULTI-SEMESTER ====== -->
+    <h2>Multi-Semester Simulation</h2>
+
+    <p>
+      Real students do not experience 56 continuous weeks of pressure. Between semesters
+      there are breaks, renewed motivation, and fresh starts. SynthEd models this with
+      inter-semester carry-over mechanics:
+    </p>
+
+    <ul>
+      <li>Engagement partially recovers during the break</li>
+      <li>Social network links decay (new cohort effect)</li>
+      <li>Dropout phase regresses by one level (fresh start)</li>
+      <li>Academic exhaustion partially recovers</li>
+      <li>Academic integration and knowledge carry over fully</li>
+    </ul>
+
+    <p>
+      With these mechanics, a 4-semester simulation produces ~95% cumulative dropout
+      (200 &rarr; 104 &rarr; 50 &rarr; 16 &rarr; 10 surviving), which aligns with
+      ODL literature reporting 40&ndash;80% dropout rates per cohort.
+    </p>
+
+    <!-- ====== SECTION 5: VALIDATION ====== -->
+    <h2>17 Statistical Validation Tests</h2>
+
+    <p>
+      How do you know synthetic data is any good? SynthEd includes a built-in validation
+      suite that automatically checks 17 statistical tests across all theoretical frameworks:
+    </p>
+
+    <ul>
+      <li>KS-tests and chi-squared tests for demographic distributions</li>
+      <li>Correlation checks: conscientiousness &harr; dropout, self-efficacy &harr; engagement, financial stress &harr; dropout</li>
+      <li>Temporal coherence: dropout students must show declining engagement trajectories</li>
+      <li>SDT validation: intrinsically motivated students should have higher engagement than amotivated ones</li>
+      <li>Privacy: k-anonymity check on quasi-identifiers</li>
+    </ul>
+
+    <p>
+      The pipeline currently achieves <strong>A (Excellent)</strong> quality with
+      17/17 tests passing on the default configuration.
+    </p>
+
+    <!-- ====== SECTION 6: WHAT'S NEXT ====== -->
+    <h2>What Is Next</h2>
+
+    <p>
+      SynthEd is under active development. The next major milestone is
+      <strong>OULAD-compatible export</strong> &mdash; generating data in the exact format
+      of the Open University Learning Analytics Dataset so researchers can use SynthEd
+      as a drop-in replacement or augmentation for their existing EDM workflows.
+    </p>
+
+    <p>
+      The full source code, documentation, and benchmark profiles are available on
+      <a href="https://github.com/theaiagent/SynthEd" target="_blank" rel="noopener">GitHub</a>,
+      and the project is archived with a DOI on
+      <a href="https://doi.org/10.5281/zenodo.19334118" target="_blank" rel="noopener">Zenodo</a>.
+    </p>
+
+  </article>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="https://github.com/theaiagent" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/aykut-cosgun/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:h.aykut.cosgun@gmail.com">Email</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Aykut Cosgun. All rights reserved.</p>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
